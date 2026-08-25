@@ -16,17 +16,17 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "customer_name" ,nullable = false)
     private String customerName;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     private OrderStatus status;
 
-    @Column(nullable = false)
+    @Column(name = "total",nullable = false)
     private BigDecimal total;
 
-    @Column(nullable = false)
+    @Column(name = "createdAt", nullable = false)
     private LocalDateTime createdAt;
 
     public Order() {
