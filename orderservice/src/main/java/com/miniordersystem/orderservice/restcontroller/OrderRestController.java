@@ -1,15 +1,13 @@
-package com.miniordersystem.orderservice.restrcontroller;
+package com.miniordersystem.orderservice.restcontroller;
 
-
-import com.miniordersystem.orderservice.domain.Order;
-import com.miniordersystem.orderservice.domain.OrderStatus;
 import com.miniordersystem.orderservice.dto.CreateOrderRequest;
+import com.miniordersystem.orderservice.dto.OrderResponse;
 import com.miniordersystem.orderservice.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriBuilder;
+
 
 import java.net.URI;
 import java.util.List;
@@ -25,27 +23,30 @@ public class OrderRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders(){
+    public ResponseEntity<List<OrderResponse>> getAllOrders(){
         return ResponseEntity.ok().body(orderService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrder(@PathVariable Long id){
+    public ResponseEntity<OrderResponse> getOrder(@PathVariable Long id){
         return ResponseEntity.ok().body(orderService.findOrder(id));
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@Valid @RequestBody CreateOrderRequest orderRequest){
-
-        Order order = orderService.createOrder(orderRequest);
-
+    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest orderRequest){
+        OrderResponse order = orderService.createOrder(orderRequest);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(order.getId())
+                .buildAndExpand(order.id())
                 .toUri();
-
         return ResponseEntity.created(uri).body(order);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id){
+        orderService.deleteOrder(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
