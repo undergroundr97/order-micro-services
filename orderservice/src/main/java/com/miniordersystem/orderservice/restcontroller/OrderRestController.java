@@ -62,9 +62,9 @@ public class OrderRestController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<OrderResponse> patchOrder(@PathVariable Long id,
-                                                    @Valid @RequestBody PatchOrderRequest){
-
-        return ResponseEntity.ok()
+                                                    @Valid @RequestBody PatchOrderRequest request){
+        OrderResponse orderResponse = orderService.patchOrder(id, request);
+        return ResponseEntity.ok().body(orderResponse);
     }
 
 

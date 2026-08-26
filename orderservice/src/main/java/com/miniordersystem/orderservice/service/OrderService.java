@@ -77,6 +77,7 @@ public class OrderService {
         Order order = orderRepository.findById(id).orElseThrow( () -> new OrderNotFoundException("Cannot find order " +
                 "with id: " + id + "."));
         orderMapper.patchOrder(request, order);
+        orderRepository.save(order);
         return orderMapper.toResponse(order);
     }
 
