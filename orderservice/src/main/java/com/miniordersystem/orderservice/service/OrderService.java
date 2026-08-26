@@ -61,6 +61,10 @@ public class OrderService {
     }
 
     public OrderResponse updateOrder(Long id, UpdateOrderRequest request){
+
+        if(request == null){
+
+        }
         Order order = orderRepository.findById(id).orElseThrow( () -> new OrderNotFoundException("Cannot find order " +
                 "with id: " + id + "."));
 
