@@ -2,6 +2,7 @@ package com.miniordersystem.orderservice.restcontroller;
 
 import com.miniordersystem.orderservice.dto.CreateOrderRequest;
 import com.miniordersystem.orderservice.dto.OrderResponse;
+import com.miniordersystem.orderservice.dto.PatchOrderRequest;
 import com.miniordersystem.orderservice.dto.UpdateOrderRequest;
 import com.miniordersystem.orderservice.service.OrderService;
 import jakarta.validation.Valid;
@@ -61,7 +62,10 @@ public class OrderRestController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<OrderResponse> patchOrder(@PathVariable Long id,
-                                                    @Valid @RequestBody )
+                                                    @Valid @RequestBody PatchOrderRequest){
+
+        return ResponseEntity.ok()
+    }
 
 
 }

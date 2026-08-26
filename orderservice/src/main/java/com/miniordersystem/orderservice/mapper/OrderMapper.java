@@ -2,11 +2,14 @@ package com.miniordersystem.orderservice.mapper;
 
 import com.miniordersystem.orderservice.domain.Order;
 import com.miniordersystem.orderservice.dto.OrderResponse;
+import com.miniordersystem.orderservice.dto.PatchOrderRequest;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
-public class OrderMapper {
 
-    public static OrderResponse toResponse(Order order){
-        return new OrderResponse(order.getId(), order.getCustomerName(), order.getStatus(), order.getTotal(), order.getCreatedAt());
-    }
+@Mapper(componentModel = "spring")
+public interface OrderMapper {
+    OrderResponse toResponse(Order order);
 
+    void patchOrder(PatchOrderRequest request, @MappingTarget Order order);
 }
