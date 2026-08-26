@@ -5,6 +5,7 @@ import com.miniordersystem.orderservice.domain.Order;
 import com.miniordersystem.orderservice.domain.OrderStatus;
 import com.miniordersystem.orderservice.dto.CreateOrderRequest;
 import com.miniordersystem.orderservice.dto.OrderResponse;
+import com.miniordersystem.orderservice.dto.UpdateOrderRequest;
 import com.miniordersystem.orderservice.mapper.OrderMapper;
 import com.miniordersystem.orderservice.repository.OrderRepository;
 import com.miniordersystem.orderservice.restcontroller.exception.customexception.OrderNotFoundException;
@@ -55,6 +56,18 @@ public class OrderService {
         Order order = orderRepository.findById(id).orElseThrow( () -> new OrderNotFoundException("Order with " +
                 "id: " + id + " was not found."));
         orderRepository.delete(order);
+    }
+
+    public OrderResponse updateOrder(Long id, UpdateOrderRequest request){
+        Order order = orderRepository.findById(id).orElseThrow( () -> new OrderNotFoundException("Cannot find order " +
+                "with id: " + id + "."));
+
+        order.setCustomerName(request.customerName());
+        order.setTotal(request.total());
+
+        Order savedOrder = orderRepository.save(order);
+
+        return OrderMapper.toResponse(savedOrder);
     }
 
 }

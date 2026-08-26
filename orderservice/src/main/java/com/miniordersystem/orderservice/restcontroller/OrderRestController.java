@@ -2,6 +2,7 @@ package com.miniordersystem.orderservice.restcontroller;
 
 import com.miniordersystem.orderservice.dto.CreateOrderRequest;
 import com.miniordersystem.orderservice.dto.OrderResponse;
+import com.miniordersystem.orderservice.dto.UpdateOrderRequest;
 import com.miniordersystem.orderservice.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,18 @@ public class OrderRestController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderResponse> updateOrder(@PathVariable Long id,
+                                                     @Valid @RequestBody UpdateOrderRequest request){
+
+        OrderResponse orderResponse = orderService.updateOrder(id, request);
+
+        return ResponseEntity.ok().body(orderResponse);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<OrderResponse> patchOrder(@PathVariable Long id,
+                                                    @Valid @RequestBody )
 
 
 }
