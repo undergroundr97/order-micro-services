@@ -1,4 +1,12 @@
 package com.miniordersystem.orderservice.messaging.event;
 
-public class OrderCreatedEvent {
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public record OrderCreatedEvent(
+        Long orderId,
+        BigDecimal total,
+        LocalDateTime createdAt
+) {
+
 }
