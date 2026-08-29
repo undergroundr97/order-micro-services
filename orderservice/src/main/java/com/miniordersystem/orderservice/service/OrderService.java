@@ -7,6 +7,7 @@ import com.miniordersystem.orderservice.dto.CreateOrderRequest;
 import com.miniordersystem.orderservice.dto.OrderResponse;
 import com.miniordersystem.orderservice.dto.PatchOrderRequest;
 import com.miniordersystem.orderservice.dto.UpdateOrderRequest;
+import com.miniordersystem.orderservice.mapper.OrderEventMapper;
 import com.miniordersystem.orderservice.mapper.OrderMapper;
 import com.miniordersystem.orderservice.messaging.event.OrderCreatedEvent;
 import com.miniordersystem.orderservice.messaging.producer.OrderEventProducer;
@@ -23,12 +24,19 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderEventMapper orderEventMapper;
     private final OrderEventProducer orderEventProducer;
 
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, OrderEventProducer orderEventProducer){
+    public OrderService(
+            OrderRepository orderRepository,
+            OrderMapper orderMapper,
+            OrderEventProducer orderEventProducer,
+            OrderEventMapper orderEventMapper)
+    {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.orderEventProducer = orderEventProducer;
+        this.orderEventMapper = orderEventMapper;
     }
 
     public OrderResponse createOrder(CreateOrderRequest orderRequest){
@@ -36,8 +44,8 @@ public class OrderService {
         Order order = new Order(null, orderRequest.customerName(), OrderStatus.PENDING, orderRequest.total(), dateTimeNow);
         Order savedOrder = orderRepository.save(order);
 
-
-        orderEventProducer.publishOrderCreated();
+        OrderCreatedEvent orderCreatedEvent = orderEventMapper.toOrderCreatedEvent(savedOrder);
+        orderEventProducer.publishOrderCreated(orderCreatedEvent);
 
         return orderMapper.toResponse(savedOrder);
     }
