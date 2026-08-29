@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class PaymentEventProducer {
 
     private static final String PAYMENT_EXCHANGE = "payment.exchange";
-    private static final String PAYMENT_APPROVED_ROUTING_KEY = "payment.aproved";
+    private static final String PAYMENT_APPROVED_ROUTING_KEY = "payment.approved";
     private static final String PAYMENT_REJECTED_ROUTING_KEY = "payment.rejected";
 
     private final RabbitTemplate rabbitTemplate;

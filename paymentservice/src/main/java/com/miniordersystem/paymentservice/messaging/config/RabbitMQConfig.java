@@ -27,12 +27,12 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue approvedQueue(){
-        return new Queue("payment.approved.order.queue");
+        return new Queue("payment.approved.order.queue", true);
     }
 
     @Bean
     public Queue rejectedQueue(){
-        return new Queue("payment.rejected.order.queue");
+        return new Queue("payment.rejected.order.queue", true);
     }
 
 

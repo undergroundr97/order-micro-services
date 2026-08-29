@@ -5,6 +5,7 @@ import com.miniordersystem.paymentservice.domain.PaymentStatus;
 import com.miniordersystem.paymentservice.gateway.FakePaymentGateway;
 import com.miniordersystem.paymentservice.gateway.PaymentGateway;
 import com.miniordersystem.paymentservice.messaging.event.OrderCreatedEvent;
+import com.miniordersystem.paymentservice.messaging.event.PaymentEvent;
 import com.miniordersystem.paymentservice.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,13 +34,18 @@ public class PaymentService {
         );
         paymentRepository.save(payment);
 
+        Payment processedPayment = updateProcessPayment(payment);
+        paymentRepository.save(processedPayment);
+
+
+
+    }
+
+    private Payment updateProcessPayment(Payment payment){
         boolean paymentAfterProcess = paymentGateway.process(payment.getAmount());
-
-
         payment.setStatus(currentStatus(paymentAfterProcess));
         payment.setProcessedAt(LocalDateTime.now());
-        paymentRepository.save(payment);
-
+        return payment;
     }
 
     private PaymentStatus currentStatus(boolean status){
@@ -50,5 +56,10 @@ public class PaymentService {
         }
     }
 
+
+    private PaymentEvent generateEvent(Payment payment){
+
+
+    }
 
 }
