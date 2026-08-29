@@ -1,14 +1,10 @@
 package com.miniordersystem.paymentservice.gateway;
 
+
 import java.math.BigDecimal;
 
-public class PaymentGateway implements FakePaymentGateway{
+public interface PaymentGateway {
 
+    boolean process(BigDecimal amount);
 
-    @Override
-    public boolean process(BigDecimal amount) {
-        return true;
-    }
-
-    
 }

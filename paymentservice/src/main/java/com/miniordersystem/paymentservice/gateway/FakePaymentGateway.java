@@ -1,10 +1,21 @@
 package com.miniordersystem.paymentservice.gateway;
 
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-public interface FakePaymentGateway {
+@Component
+public class FakePaymentGateway implements PaymentGateway{
 
-    boolean process(BigDecimal amount);
+
+    @Override
+    public boolean process(BigDecimal amount) {
+        if(amount.doubleValue() < 1500){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 }
