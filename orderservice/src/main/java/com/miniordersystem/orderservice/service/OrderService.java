@@ -8,6 +8,8 @@ import com.miniordersystem.orderservice.dto.OrderResponse;
 import com.miniordersystem.orderservice.dto.PatchOrderRequest;
 import com.miniordersystem.orderservice.dto.UpdateOrderRequest;
 import com.miniordersystem.orderservice.mapper.OrderMapper;
+import com.miniordersystem.orderservice.messaging.event.OrderCreatedEvent;
+import com.miniordersystem.orderservice.messaging.producer.OrderEventProducer;
 import com.miniordersystem.orderservice.repository.OrderRepository;
 import com.miniordersystem.orderservice.restcontroller.exception.customexception.OrderNotFoundException;
 import org.mapstruct.MappingTarget;
@@ -21,16 +23,21 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderEventProducer orderEventProducer;
 
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper){
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, OrderEventProducer orderEventProducer){
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+        this.orderEventProducer = orderEventProducer;
     }
 
     public OrderResponse createOrder(CreateOrderRequest orderRequest){
         LocalDateTime dateTimeNow = LocalDateTime.now();
         Order order = new Order(null, orderRequest.customerName(), OrderStatus.PENDING, orderRequest.total(), dateTimeNow);
         Order savedOrder = orderRepository.save(order);
+
+
+        orderEventProducer.publishOrderCreated();
 
         return orderMapper.toResponse(savedOrder);
     }
