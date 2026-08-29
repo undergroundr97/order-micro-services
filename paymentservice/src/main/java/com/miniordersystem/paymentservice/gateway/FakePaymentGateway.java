@@ -10,7 +10,7 @@ public class FakePaymentGateway implements PaymentGateway{
 
     @Override
     public boolean process(BigDecimal amount) {
-        if(amount.doubleValue() < 1500){
+        if(amount.compareTo(new BigDecimal("1500.00")) < 0){
             return true;
         } else {
             return false;

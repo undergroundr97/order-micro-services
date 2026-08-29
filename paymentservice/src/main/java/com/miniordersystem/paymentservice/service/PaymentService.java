@@ -17,9 +17,9 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentGateway paymentGateway;
 
-    public PaymentService(PaymentRepository paymentRepository, FakePaymentGateway fakePaymentGateway) {
+    public PaymentService(PaymentRepository paymentRepository, PaymentGateway paymentGateway) {
         this.paymentRepository = paymentRepository;
-        this.paymentGateway = fakePaymentGateway;
+        this.paymentGateway = paymentGateway;
     }
 
     public void processPayment(OrderCreatedEvent order){
@@ -31,10 +31,15 @@ public class PaymentService {
                 LocalDateTime.now(),
                 null
         );
-
-        boolean currentStatus = paymentGateway.process(payment.getAmount());
-
         paymentRepository.save(payment);
+
+        boolean paymentAfterProcess = paymentGateway.process(payment.getAmount());
+
+
+        payment.setStatus(currentStatus(paymentAfterProcess));
+        payment.setProcessedAt(LocalDateTime.now());
+        paymentRepository.save(payment);
+
     }
 
     private PaymentStatus currentStatus(boolean status){
