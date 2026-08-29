@@ -24,18 +24,16 @@ public class PaymentEventProducer {
         rabbitTemplate.convertAndSend(
                 PAYMENT_EXCHANGE,
                 PAYMENT_APPROVED_ROUTING_KEY,
-
+                event
         );
-
     }
 
     public void publishRejectedPayment(PaymentRejectedEvent event){
         rabbitTemplate.convertAndSend(
-            PAYMENT_EXCHANGE,
+                PAYMENT_EXCHANGE,
                 PAYMENT_REJECTED_ROUTING_KEY,
-
+                event
         );
-
     }
 
 

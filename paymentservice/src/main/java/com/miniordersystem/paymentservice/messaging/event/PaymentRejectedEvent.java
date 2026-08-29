@@ -1,4 +1,13 @@
 package com.miniordersystem.paymentservice.messaging.event;
 
-public record PaymentRejectedEvent() {
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public record PaymentRejectedEvent(
+        Long paymentId,
+        Long orderId,
+        BigDecimal amount,
+        LocalDateTime processedAt,
+        String reason
+) {
 }
