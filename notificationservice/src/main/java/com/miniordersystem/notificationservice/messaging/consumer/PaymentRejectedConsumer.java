@@ -17,7 +17,7 @@ public class PaymentRejectedConsumer {
     }
 
     @RabbitListener(
-            queues = "payment.rejected.order.queue"
+            queues = "payment.rejected.notification.queue"
     )
     public void consume(PaymentRejectedEvent event){
         notificationService.processRejectedEvent(event);

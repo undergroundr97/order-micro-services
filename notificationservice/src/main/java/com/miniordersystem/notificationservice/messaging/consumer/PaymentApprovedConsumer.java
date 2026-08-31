@@ -16,7 +16,7 @@ public class PaymentApprovedConsumer {
 
 
     @RabbitListener(
-            queues = "payment.approved.order.queue"
+            queues = "payment.approved.notification.queue"
     )
     public void consume(PaymentApprovedEvent event){
         notificationService.processApprovedEvent(event);
