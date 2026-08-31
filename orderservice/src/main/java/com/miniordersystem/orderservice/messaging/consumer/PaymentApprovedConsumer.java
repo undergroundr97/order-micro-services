@@ -1,6 +1,7 @@
 package com.miniordersystem.orderservice.messaging.consumer;
 
-import com.miniordersystem.orderservice.messaging.event.PaymentAccepetedEvent;
+import com.miniordersystem.orderservice.domain.OrderStatus;
+import com.miniordersystem.orderservice.messaging.event.PaymentApprovedEvent;
 import com.miniordersystem.orderservice.service.OrderService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,8 @@ public class PaymentApprovedConsumer {
     @RabbitListener(
             queues = "payment.approved.order.queue"
     )
-    public void consume(PaymentAccepetedEvent event){
+    public void consume(PaymentApprovedEvent event){
         System.out.println(event);
-        orderService.updateOrderStatus(event);
-        
+        orderService.updateOrderStatus(event.orderId(), OrderStatus.PAID);
     }
 }

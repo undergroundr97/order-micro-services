@@ -1,6 +1,7 @@
 package com.miniordersystem.orderservice.messaging.consumer;
 
-import com.miniordersystem.orderservice.messaging.event.PaymentRejectdEvent;
+import com.miniordersystem.orderservice.domain.OrderStatus;
+import com.miniordersystem.orderservice.messaging.event.PaymentRejectedEvent;
 import com.miniordersystem.orderservice.service.OrderService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,9 @@ public class PaymentRejectedConsumer {
     @RabbitListener(
             queues = "payment.rejected.order.queue"
     )
-    public void consumer(PaymentRejectdEvent event){
+    public void consumer(PaymentRejectedEvent event){
         System.out.println(event);
-        orderService.updateOrderStatus(event);
+        orderService.updateOrderStatus(event.orderId(), OrderStatus.PAYMENT_FAILED);
     }
 
 
