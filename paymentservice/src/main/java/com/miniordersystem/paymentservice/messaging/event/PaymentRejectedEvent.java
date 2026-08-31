@@ -9,5 +9,5 @@ public record PaymentRejectedEvent(
         BigDecimal amount,
         LocalDateTime processedAt,
         String reason
-) implements PaymentEvent{
+) {
 }

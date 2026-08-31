@@ -8,5 +8,5 @@ public record PaymentApprovedEvent(
         Long orderId,
         BigDecimal amount,
         LocalDateTime processedAt
-) implements PaymentEvent {
+) {
 }
