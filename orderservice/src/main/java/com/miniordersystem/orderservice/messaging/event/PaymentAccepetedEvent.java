@@ -1,5 +1,7 @@
 package com.miniordersystem.orderservice.messaging.event;
 
+import com.miniordersystem.orderservice.messaging.consumer.PaymentEvent;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -8,5 +10,5 @@ public record PaymentAccepetedEvent(
         Long orderId,
         BigDecimal amount,
         LocalDateTime processedAt
-) {
+) implements PaymentEvent {
 }

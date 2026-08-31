@@ -9,7 +9,10 @@ import com.miniordersystem.orderservice.dto.PatchOrderRequest;
 import com.miniordersystem.orderservice.dto.UpdateOrderRequest;
 import com.miniordersystem.orderservice.mapper.OrderEventMapper;
 import com.miniordersystem.orderservice.mapper.OrderMapper;
+import com.miniordersystem.orderservice.messaging.consumer.PaymentEvent;
 import com.miniordersystem.orderservice.messaging.event.OrderCreatedEvent;
+import com.miniordersystem.orderservice.messaging.event.PaymentAccepetedEvent;
+import com.miniordersystem.orderservice.messaging.event.PaymentRejectdEvent;
 import com.miniordersystem.orderservice.messaging.producer.OrderEventProducer;
 import com.miniordersystem.orderservice.repository.OrderRepository;
 import com.miniordersystem.orderservice.restcontroller.exception.customexception.OrderNotFoundException;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -77,7 +81,6 @@ public class OrderService {
 
     public OrderResponse updateOrder(Long id, UpdateOrderRequest request){
 
-
         Order order = orderRepository.findById(id).orElseThrow( () -> new OrderNotFoundException("Cannot find order " +
                 "with id: " + id + "."));
 
@@ -96,6 +99,21 @@ public class OrderService {
         orderMapper.patchOrder(request, order);
         orderRepository.save(order);
         return orderMapper.toResponse(order);
+    }
+
+    public OrderResponse updateOrderStatus(PaymentEvent event){
+        Order order = orderRepository.findById(event.orderId()).orElseThrow( () -> new OrderNotFoundException());
+
+
+        if(event.getClass().equals(PaymentAccepetedEvent.class)){
+            order.setStatus(OrderStatus.PAID);
+        } else if (event.getClass().equals(PaymentRejectdEvent.class)){
+            order.setStatus(OrderStatus.PAYMENT_FAILED);
+        }
+
+        Order savedOrder = orderRepository.save(order);
+        return orderMapper.toResponse(savedOrder);
+
     }
 
 }
