@@ -9,19 +9,14 @@ import com.miniordersystem.orderservice.dto.PatchOrderRequest;
 import com.miniordersystem.orderservice.dto.UpdateOrderRequest;
 import com.miniordersystem.orderservice.mapper.OrderEventMapper;
 import com.miniordersystem.orderservice.mapper.OrderMapper;
-import com.miniordersystem.orderservice.messaging.consumer.PaymentEvent;
 import com.miniordersystem.orderservice.messaging.event.OrderCreatedEvent;
-import com.miniordersystem.orderservice.messaging.event.PaymentAccepetedEvent;
-import com.miniordersystem.orderservice.messaging.event.PaymentRejectdEvent;
 import com.miniordersystem.orderservice.messaging.producer.OrderEventProducer;
 import com.miniordersystem.orderservice.repository.OrderRepository;
 import com.miniordersystem.orderservice.restcontroller.exception.customexception.OrderNotFoundException;
-import org.mapstruct.MappingTarget;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -101,19 +96,12 @@ public class OrderService {
         return orderMapper.toResponse(order);
     }
 
-    public OrderResponse updateOrderStatus(PaymentEvent event){
-        Order order = orderRepository.findById(event.orderId()).orElseThrow( () -> new OrderNotFoundException());
+    public void updateOrderStatus(Long id, OrderStatus status){
+       Order order = orderRepository.findById(id).orElseThrow( ()-> new OrderNotFoundException("Order was " +
+               "not found."));
 
-
-        if(event.getClass().equals(PaymentAccepetedEvent.class)){
-            order.setStatus(OrderStatus.PAID);
-        } else if (event.getClass().equals(PaymentRejectdEvent.class)){
-            order.setStatus(OrderStatus.PAYMENT_FAILED);
-        }
-
-        Order savedOrder = orderRepository.save(order);
-        return orderMapper.toResponse(savedOrder);
-
+       order.setStatus(status);
+       orderRepository.save(order);
     }
 
 }
