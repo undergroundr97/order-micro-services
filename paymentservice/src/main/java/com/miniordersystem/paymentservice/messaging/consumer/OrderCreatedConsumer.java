@@ -22,7 +22,6 @@ public class OrderCreatedConsumer {
             queues = "order.created.payment.queue"
     )
     public void consume(OrderCreatedEvent event){
-
         System.out.println(event);
         paymentService.processPayment(event);
     }

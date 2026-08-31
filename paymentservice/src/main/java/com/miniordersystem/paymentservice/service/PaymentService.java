@@ -60,11 +60,17 @@ public class PaymentService {
 
 
     private void generateEvent(Payment payment){
-        if(payment.getStatus().equals(PaymentStatus.APPROVED)){
-            paymentEventProducer.publishApprovedPayment(paymentEventMapper.toApprovedEvent(payment));
-        } else {
-             paymentEventProducer.publishRejectedPayment(paymentEventMapper.toRejectedEvent(payment));
+
+
+        switch (payment.getStatus()){
+            case PaymentStatus.APPROVED -> {
+                paymentEventProducer.publishApprovedPayment(paymentEventMapper.toApprovedEvent(payment));
+            }
+            case PaymentStatus.REJECTED -> {
+                paymentEventProducer.publishRejectedPayment(paymentEventMapper.toRejectedEvent(payment));
+            }
         }
+
     }
 
 }
