@@ -26,25 +26,46 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue approvedQueue(){
-        return new Queue("payment.approved.order.queue", true);
+    public DirectExchange orderExchange(){
+        return new DirectExchange("order.exchange");
     }
 
     @Bean
-    public Queue rejectedQueue(){
-        return new Queue("payment.rejected.order.queue", true);
+    public Queue orderCreatedQueue(){
+        return new Queue("order.created.payment.queue");
     }
 
 
     @Bean
-    public Binding paymentApprovedBinding(@Qualifier("approvedQueue") Queue queue, DirectExchange exchange){
-        return BindingBuilder.bind(queue).to(exchange).with("payment.approved");
+    public Binding orderCreatedBinding(
+            @Qualifier("orderCreatedQueue") Queue queue,
+            @Qualifier("orderExchange") DirectExchange directExchange
+    ){
+        return BindingBuilder.bind(queue).to(directExchange).with("order.created");
     }
 
-    @Bean
-    public Binding paymentRejectedBinding(@Qualifier("rejectedQueue") Queue queue, DirectExchange exchange){
-        return BindingBuilder.bind(queue).to(exchange).with("payment.rejected");
-    }
+
+
+//    @Bean
+//    public Queue approvedQueue(){
+//        return new Queue("payment.approved.order.queue", true);
+//    }
+//
+//    @Bean
+//    public Queue rejectedQueue(){
+//        return new Queue("payment.rejected.order.queue", true);
+//    }
+//
+//
+//    @Bean
+//    public Binding paymentApprovedBinding(@Qualifier("approvedQueue") Queue queue, DirectExchange exchange){
+//        return BindingBuilder.bind(queue).to(exchange).with("payment.approved");
+//    }
+//
+//    @Bean
+//    public Binding paymentRejectedBinding(@Qualifier("rejectedQueue") Queue queue, DirectExchange exchange){
+//        return BindingBuilder.bind(queue).to(exchange).with("payment.rejected");
+//    }
 
 
 }
