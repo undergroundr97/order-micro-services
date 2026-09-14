@@ -1,0 +1,60 @@
+FASE 1 — Mensageria básica                
+Producer
+Consumer
+Exchange
+Routing key
+Binding
+Múltiplas queues
+Múltiplos serviços
+
+FASE 2 — Docker                           
+Dockerfile
+Docker Compose
+Networks
+Volumes
+Environment variables
+PostgreSQL container
+RabbitMQ container
+3 serviços containerizados
+
+FASE 3 — Confiabilidade RabbitMQ
+Idempotência
+ACK / NACK
+Retry
+Requeue
+Dead Letter Queue (DLQ)
+Dead Letter Exchange (DLX)
+
+FASE 4 — Testes
+JUnit
+Mockito
+Testes dos services
+Testes dos consumers
+Testcontainers
+RabbitMQ real em testes
+PostgreSQL real em testes
+
+FASE 5 — Observabilidade
+Spring Boot Actuator
+Health checks
+Logs estruturados
+Correlation ID
+Tracing entre serviços
+
+FASE 6 — Resiliência
+Timeouts
+Retries externos
+Circuit Breaker
+Resilience4j
+
+FASE 7 — Consistência distribuída
+Transactional Outbox
+Eventual consistency
+Idempotent Consumer
+
+FASE 8 — CI/CD
+GitHub Actions
+build
+test
+Docker image
+pipeline

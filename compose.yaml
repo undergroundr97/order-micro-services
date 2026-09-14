@@ -1,0 +1,82 @@
+services: 
+    rabbitmq:
+        image: rabbitmq:4-management
+        container_name: mini-order-rabbitmq
+        ports:
+           - "5672:5672"
+           - "15672:15672"
+            
+        environment: 
+            RABBITMQ_DEFAULT_USER: orderuser
+            RABBITMQ_DEFAULT_PASS: orderpass
+
+    order-service:
+        image: mini-order-order-service:0.0.1
+        container_name: mini-order-order-service
+
+        ports:
+            - "8081:8081"
+
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://order-postgres:5432/order_db
+            SPRING_DATASOURCE_USERNAME: postgres
+            SPRING_DATASOURCE_PASSWORD: admin
+
+            SPRING_RABBITMQ_HOST: rabbitmq
+            SPRING_RABBITMQ_PORT: 5672
+            SPRING_RABBITMQ_USERNAME: orderuser
+            SPRING_RABBITMQ_PASSWORD: orderpass
+
+    payment-service:
+        image: mini-order-payment-service:0.0.1
+        container_name: mini-order-payment-service
+
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://payment-postgres:5432/payments_db
+            SPRING_DATASOURCE_USERNAME: postgres
+            SPRING_DATASOURCE_PASSWORD: admin
+
+            SPRING_RABBITMQ_HOST: rabbitmq
+            SPRING_RABBITMQ_PORT: 5672
+            SPRING_RABBITMQ_USERNAME: orderuser
+            SPRING_RABBITMQ_PASSWORD: orderpass
+
+
+    notification-service:
+        image: mini-order-notification-service:0.0.1
+        container_name: mini-order-notification-service
+
+        environment:
+            SPRING_RABBITMQ_HOST: rabbitmq
+            SPRING_RABBITMQ_PORT: 5672
+            SPRING_RABBITMQ_USERNAME: orderuser
+            SPRING_RABBITMQ_PASSWORD: orderpass
+
+    order-postgres:
+        image: postgres:18
+        container_name: mini-order-order-postgres
+
+        environment:
+            POSTGRES_DB: order_db
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: admin
+        volumes:
+            - order_postgres_data:/var/lib/postgresql
+
+    payment-postgres:
+        image: postgres:18
+        container_name: mini-order-payment-postgres
+
+        environment:
+            POSTGRES_DB: payments_db
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: admin
+
+        volumes: 
+            - payment_postgres_data:/var/lib/postgresql
+        
+        
+
+volumes: 
+    order_postgres_data: 
+    payment_postgres_data: 
